@@ -1,15 +1,22 @@
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.retry.RetryPolicy;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.regions.internal.util.EC2MetadataUtils;
 import software.amazon.awssdk.services.ec2.Ec2Client;
-import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
-import software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse;
-import software.amazon.awssdk.services.ec2.model.Reservation;
-import software.amazon.awssdk.services.ec2.model.Instance;
-import software.amazon.awssdk.services.ec2.model.Filter;
+import software.amazon.awssdk.services.ec2.model.*;
 
 public class Example {
+    static void getCurrentAvailabilityZone() {
+        try {
+            System.out.println("Current instance availability zone: " + EC2MetadataUtils.getAvailabilityZone());
+        } catch (SdkClientException ex) {
+            System.err.println("Error getting current instance availability zone: " + ex.getMessage());
+        }
+    }
     public static void main(final String[] args) {
+        getCurrentAvailabilityZone();
+
         DefaultCredentialsProvider credentialsProviderChain = DefaultCredentialsProvider.create(); // AWSStaticCredentialsProvider
 
         RetryPolicy retryPolicy = RetryPolicy.builder()
